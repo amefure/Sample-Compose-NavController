@@ -27,16 +27,14 @@ import androidx.navigation.navArgument
 import com.amefure.testnavcontroller.ui.theme.TestNavControllerTheme
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TestNavControllerTheme {
-
-                Scaffold {
+                Scaffold { innerPadding ->
                     NavContainer(
-                        modifier = Modifier.padding()
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
@@ -52,26 +50,26 @@ fun NavContainer(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Home.route(),
         modifier = modifier
     ) {
-        composable(Screen.Home.route) {
+        composable(Screen.Home.route()) {
             HomeScreen(onItemClick = { id ->
-                navController.navigate("detail/$id")
+                navController.navigate(Screen.Detail.route(id))
             }, onSettingsClick = {
-                navController.navigate(Screen.Settings.route)
+                navController.navigate(Screen.Settings.route())
             })
         }
 
         composable(
-            route = Screen.Detail.route,
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType })
+            route = Screen.Detail.route(),
+            arguments = listOf(navArgument(Screen.Detail.ARG_ITEM_ID) { type = NavType.IntType })
         ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+            val itemId = backStackEntry.arguments?.getInt(Screen.Detail.ARG_ITEM_ID) ?: 0
             DetailScreen(itemId = itemId, onBack = { navController.popBackStack() })
         }
 
-        composable(Screen.Settings.route) {
+        composable(Screen.Settings.route()) {
             SettingsScreen(onBack = { navController.popBackStack() })
         }
     }
@@ -128,8 +126,23 @@ fun SettingsScreen(onBack: () -> Unit) {
     }
 }
 
-private enum class Screen(val route: String) {
-    Home("home"),
-    Detail("detail/{itemId}"),
-    Settings("settings")
+sealed class Screen {
+    abstract fun route(): String
+
+    data object Home : Screen() {
+        override fun route() = "home"
+    }
+
+    data object Settings : Screen() {
+        override fun route() = "settings"
+    }
+
+    data object Detail : Screen() {
+        const val ARG_ITEM_ID = "itemId"
+        // pattern 用
+        override fun route() = "detail/{$ARG_ITEM_ID}"
+        fun route(itemId: Int) = "detail/$itemId"
+    }
 }
+
+
