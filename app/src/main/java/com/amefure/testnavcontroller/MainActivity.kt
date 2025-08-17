@@ -139,7 +139,7 @@ sealed class Screen {
 
     data object Detail : Screen() {
         const val ARG_ITEM_ID = "itemId"
-        // pattern 用
+        /** pattern */
         override fun route() = "detail/{$ARG_ITEM_ID}"
         fun route(itemId: Int) = "detail/$itemId"
     }
