@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -53,7 +57,19 @@ private fun NavContainer(
 
         composable(
             route = Screen.Detail.route(),
-            arguments = listOf(navArgument(Screen.Detail.ARG_ITEM_ID) { type = NavType.IntType })
+            arguments = listOf(navArgument(Screen.Detail.ARG_ITEM_ID) { type = NavType.IntType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 500,
+                        easing = LinearOutSlowInEasing
+                    ),
+                    initialAlpha = 0.5f
+                )
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(durationMillis = 500), targetAlpha = 0.5f)
+            },
         ) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getInt(Screen.Detail.ARG_ITEM_ID) ?: 0
             DetailScreen(itemId = itemId, onBack = { navController.popBackStack() })

@@ -13,12 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Settings Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
+fun SettingsScreen(
+    onBack: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            "Settings Screen",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(
+            modifier = Modifier
+                .height(16.dp)
+        )
         Button(onClick = onBack) {
             Text("Back")
         }
