@@ -14,13 +14,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-class HomeScreen@Composable
-fun HomeScreen(onItemClick: (Int) -> Unit, onSettingsClick: () -> Unit) {
-    Column(modifier = Modifier
+@Composable
+fun HomeScreen(
+    onItemClick: (Int) -> Unit,
+    onSettingsClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Home Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
+        .padding(16.dp)
+    ) {
+        Text(
+            "Home Screen",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Spacer(
+            modifier = Modifier
+                .height(16.dp)
+        )
+
         (1..5).forEach { id ->
             Text(
                 text = "Item $id",
@@ -30,7 +43,10 @@ fun HomeScreen(onItemClick: (Int) -> Unit, onSettingsClick: () -> Unit) {
                     .padding(8.dp)
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(
+            modifier = Modifier
+                .height(16.dp)
+        )
         Button(onClick = onSettingsClick) {
             Text("Go to Settings")
         }

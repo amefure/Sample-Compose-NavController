@@ -14,13 +14,27 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun DetailScreen(itemId: Int, onBack: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Detail Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Item ID: $itemId", style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(16.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            "Detail Screen",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(
+            modifier = Modifier
+                .height(16.dp)
+        )
+        Text(
+            "Item ID: $itemId",
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(
+            modifier = Modifier
+                .height(16.dp)
+        )
         Button(onClick = onBack) {
             Text("Back")
         }
