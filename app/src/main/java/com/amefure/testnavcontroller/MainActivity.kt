@@ -1,29 +1,19 @@
 package com.amefure.testnavcontroller
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.amefure.testnavcontroller.model.Screen
 import com.amefure.testnavcontroller.ui.theme.TestNavControllerTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,7 +33,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavContainer(
+private fun NavContainer(
     modifier: Modifier
 ) {
     val navController = rememberNavController()
@@ -74,75 +64,3 @@ fun NavContainer(
         }
     }
 }
-
-@Composable
-fun HomeScreen(onItemClick: (Int) -> Unit, onSettingsClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Home Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        (1..5).forEach { id ->
-            Text(
-                text = "Item $id",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onItemClick(id) }
-                    .padding(8.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onSettingsClick) {
-            Text("Go to Settings")
-        }
-    }
-}
-
-@Composable
-fun DetailScreen(itemId: Int, onBack: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Detail Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Item ID: $itemId", style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onBack) {
-            Text("Back")
-        }
-    }
-}
-
-@Composable
-fun SettingsScreen(onBack: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        Text("Settings Screen", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onBack) {
-            Text("Back")
-        }
-    }
-}
-
-sealed class Screen {
-    abstract fun route(): String
-
-    data object Home : Screen() {
-        override fun route() = "home"
-    }
-
-    data object Settings : Screen() {
-        override fun route() = "settings"
-    }
-
-    data object Detail : Screen() {
-        const val ARG_ITEM_ID = "itemId"
-        /** pattern */
-        override fun route() = "detail/{$ARG_ITEM_ID}"
-        fun route(itemId: Int) = "detail/$itemId"
-    }
-}
-
-
