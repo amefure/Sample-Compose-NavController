@@ -48,16 +48,12 @@ private fun NavContainer(
         modifier = modifier
     ) {
         composable(Screen.Home.route()) {
-            HomeScreen(onItemClick = { id ->
-                navController.navigate(Screen.Detail.route(id))
-            }, onSettingsClick = {
-                navController.navigate(Screen.Settings.route())
-            })
+            HomeScreen(navController)
         }
 
         composable(
             route = Screen.Detail.route(),
-            arguments = listOf(navArgument(Screen.Detail.ARG_ITEM_ID) { type = NavType.IntType }),
+            arguments = listOf(navArgument(Screen.Detail.ARG_ITEM_ID) { type = NavType.ReferenceType }),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(
@@ -72,11 +68,14 @@ private fun NavContainer(
             },
         ) { backStackEntry ->
             val itemId = backStackEntry.arguments?.getInt(Screen.Detail.ARG_ITEM_ID) ?: 0
-            DetailScreen(itemId = itemId, onBack = { navController.popBackStack() })
+            DetailScreen(
+                itemId = itemId,
+                navController = navController
+            )
         }
 
         composable(Screen.Settings.route()) {
-            SettingsScreen(onBack = { navController.popBackStack() })
+            SettingsScreen(navController)
         }
     }
 }

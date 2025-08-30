@@ -11,13 +11,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.amefure.testnavcontroller.model.Screen
 
 @Composable
 fun HomeScreen(
-    onItemClick: (Int) -> Unit,
-    onSettingsClick: () -> Unit
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -34,12 +37,23 @@ fun HomeScreen(
                 .height(16.dp)
         )
 
+        val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+        val backScreen: String? = savedStateHandle
+            ?.getStateFlow<String?>("backScreen", initialValue = null)
+            ?.collectAsState()
+            ?.value
+
+        if (!backScreen.isNullOrEmpty()) {
+            Text(backScreen)
+        }
+
+
         (1..5).forEach { id ->
             Text(
                 text = "Item $id",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onItemClick(id) }
+                    .clickable { navController.navigate(Screen.Detail.route(id)) }
                     .padding(8.dp)
             )
         }
@@ -47,7 +61,11 @@ fun HomeScreen(
             modifier = Modifier
                 .height(16.dp)
         )
-        Button(onClick = onSettingsClick) {
+        Button(
+            onClick = {
+                navController.navigate(Screen.Settings.route())
+            }
+        ) {
             Text("Go to Settings")
         }
     }

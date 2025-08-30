@@ -11,9 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
-fun DetailScreen(itemId: Int, onBack: () -> Unit) {
+fun DetailScreen(
+    itemId: Int,
+    navController: NavHostController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +39,14 @@ fun DetailScreen(itemId: Int, onBack: () -> Unit) {
             modifier = Modifier
                 .height(16.dp)
         )
-        Button(onClick = onBack) {
+        Button(
+            onClick = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("backScreen", "詳細画面から戻ったよ")
+                navController.popBackStack()
+            }
+        ) {
             Text("Back")
         }
     }

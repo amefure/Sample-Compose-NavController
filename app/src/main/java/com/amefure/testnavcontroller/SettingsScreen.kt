@@ -11,10 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -29,7 +30,14 @@ fun SettingsScreen(
             modifier = Modifier
                 .height(16.dp)
         )
-        Button(onClick = onBack) {
+        Button(
+            onClick = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("backScreen", "設定画面から戻ったよ")
+                navController.popBackStack()
+            }
+        ) {
             Text("Back")
         }
     }
